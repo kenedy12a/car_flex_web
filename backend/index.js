@@ -131,7 +131,7 @@ app.delete("/cfr/delete/:id", (req,res) => {
             console.log(err)
             return res.status(500).json({message : "internal server error"})
         }
-        if(result.length === 0){
+        if(result.affectedRows === 0){
             return res.status(404).json({message : "car not found"})
         }
         return res.status(201).json({message : "Car deleted successfully"})
@@ -139,8 +139,63 @@ app.delete("/cfr/delete/:id", (req,res) => {
 })
 
 //_____________CAR FOR SALE______________\\
+//Add a car for sale
 
+app.post("/cfs/insert",(req,res) => {
+    const {car_name,available_seat,price_per_car} = req.body;
+    const sql = "INSERT INTO car_for_sale(car_name,available_seat,price_per_car) VALUES(?,?,?)";
+    conn.query(sql,[car_name,available_seat,price_per_car],(err,result) => {
+        if(err){
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        return res.status(200).json({ message : "Upload was sucussesful"})
+    })
+})
+//Read All car for sale
 
+app.get("/cfs/read",(req,res) => {
+    const sql = "SELECT * FROM car_for_sale";
+    conn.query(sql,(err,result) => {
+        if(err){
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        if(result.length === 0){
+            return res.status(404).json({ message : "Empty db please add car on db"})
+        }
+        return res.status(200).json({ message : "View All Car"})
+    })
+})
+//Update car for sale
 
+app.put("/cfs/update/:id",(req,res) => {
+    const id = req.params.id;
+    const {car_name,available_seat,price_per_car} = req.body;
+    const sql = "UPDATE car_for_sale SET car_name = ?,available_seat = ?,price_per_car = ? WHERE car_id = id";
+    conn.query(sql,[car_name,available_seat,price_per_car,id],(err,result) => {
+        if(err){
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        if(result.affectedRows === 0){
+            return res.status(404).json({message : "Car not found to update"})
+        }
+        return res.status(201).json({message : "Car updated successfully"})
+    }) 
+})
+//Delete car for sale
+
+app.delete("/cfs/delete/:id",(req,res) => {
+    const id = req.params.id;
+    const sql = "DELETE FROM car_for_sale WHERE car_id = ?";
+    conn.query(sql,[id],(err,result) => {
+        if(err){
+            console.log(err)
+            return res.status(500).json({message : "Internal Server Error"})
+        }
+        if(result.affectedRows === 0){
+            return res.status(404).json({message : "Car can not found"})
+        }
+        return res.status(201).json({message : "Deleted successfully"})
+    })
+})
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => { console.log("server is running on 3000 port") }) 
