@@ -197,5 +197,16 @@ app.delete("/cfs/delete/:id",(req,res) => {
         return res.status(201).json({message : "Deleted successfully"})
     })
 })
+//create categories
+app.post("/category/create",(req,res) => {
+    const category = req.body;
+    const sql = "INSERT INTO ctegories(categoty_name) VALUES(?)";
+    conn.query(sql,[category],(err,result)=>{
+        if(err){
+            return res.status(500).json({message : "Internal Server Error"})
+        }
+        return res.status(201).json({message : "category created succusesful"})
+    })
+})
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => { console.log("server is running on 3000 port") }) 

@@ -23,9 +23,9 @@ CREATE TABLE car_for_sale(
     available_seat int(50) NOT NULL,
     price_per_car int(50) NOT NULL
 );
-CREATE TABLE ctegories(
+CREATE TABLE categories(
     category_id int PRIMARY KEY AUTO_INCREMENT,
-    categoty_name varchar(50) NOT NULL
+    category_name varchar(50) NOT NULL
 );
 CREATE TABLE contact (
     id INT AUTO_INCREMENT PRIMARY KEY,
