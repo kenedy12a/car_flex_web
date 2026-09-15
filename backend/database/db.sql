@@ -15,17 +15,25 @@ CREATE TABLE car_for_rental(
     available_seat int(50) NOT NULL,
     price_per_day int(50),
     price_per_week int(50),
-    price_per_month int(50)
+    price_per_month int(50),
+    category_id int,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL
+
 );
 CREATE TABLE car_for_sale(
     car_id int PRIMARY KEY AUTO_INCREMENT,
     car_name varchar(50) NOT NULL,
     available_seat int(50) NOT NULL,
-    price_per_car int(50) NOT NULL
+    price_per_car int(50) NOT NULL,
+    category_id int,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL
+
 );
 CREATE TABLE categories(
     category_id int PRIMARY KEY AUTO_INCREMENT,
-    category_name varchar(50) NOT NULL
+    category_name varchar(50) NOT NULL,
+    description TEXT,
+    category_image VARCHAR(255)
 );
 CREATE TABLE contact (
     id INT AUTO_INCREMENT PRIMARY KEY,
