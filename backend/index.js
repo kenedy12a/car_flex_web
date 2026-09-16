@@ -198,15 +198,76 @@ app.delete("/cfs/delete/:id",(req,res) => {
     })
 })
 //create categories
-app.post("/category/create",(req,res) => {
-    const category = req.body;
-    const sql = "INSERT INTO ctegories(categoty_name) VALUES(?)";
-    conn.query(sql,[category],(err,result)=>{
+app.post("/category/insert",(req,res) => {
+    const {category_name,description,category_image} = req.body;
+    const sql = "INSERT INTO categories(category_name,description,category_image) VALUES(?,?,?)";
+    conn.query(sql,[category_name,description,category_image],(err,result)=>{
         if(err){
+            console.log(err)
             return res.status(500).json({message : "Internal Server Error"})
         }
         return res.status(201).json({message : "category created succusesful"})
     })
 })
+//Get All Category
+
+app.get("/category/read", (req,res) => {
+    const sql = "SELECT * FROM categories";
+    conn.query(sql,(err,result) => {
+        if(err){
+            console.log(err)
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        return res.status(200).json({message : "Read All Categories", result})
+    })
+})
+//Get One Category
+app.get("/category/read/:id",(req,res) =>{
+    const id = req.params.id;
+    const sql = "SELECT * FROM categories WHERE category_id = ?";
+    conn.query(sql,[id],(err,result) => {
+        if(err){
+            console.log(err)
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        if(result.length === 0){
+            return res.status(404).json({ message : "Category Not Found"})
+        }
+        return res.status(200).json({ message : "Read Category",result})
+    })
+})
+//update category
+app.put("/category/update/:id",(req,res) => {
+    const id = req.params.id;
+    const {category_name,description,category_image} = req.body;
+    const sql = "UPDATE categories SET category_name = ?,description = ?,category_image = ? WHERE category_id = ?";
+    conn.query(sql,[category_name,description,category_image,id], (err,result) => {
+        if(err){
+            console.log(err)
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        if(result.affectedRows === 0){
+            return res.status(404).json({ message : "Category Not FOund"})
+        }
+        return res.status(200).json({ message : "Category Updated sucussesful"})
+    })
+})
+//Delete category
+
+app.delete("/category/delete/:id",(req,res) => {
+    const id  = req.params.id;
+    const sql = "DELETE FROM categories WHERE category_id = ?";
+    conn.query(sql,[id],(err,result) => {
+        if(err){
+            console.log(err)
+            return res.status(500).json({ message : "Internal Server Error"})
+        }
+        if(result.affectedRows === 0){
+            return res.status(404).json({ message : "Category Not FOund"})
+        }
+        return res.status(200).json({ message : "Category Deleted Sucussesful"})
+    })
+})
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => { console.log("server is running on 3000 port") }) 

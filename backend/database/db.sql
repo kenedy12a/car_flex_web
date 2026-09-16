@@ -33,7 +33,8 @@ CREATE TABLE categories(
     category_id int PRIMARY KEY AUTO_INCREMENT,
     category_name varchar(50) NOT NULL,
     description TEXT,
-    category_image VARCHAR(255)
+    category_image VARCHAR(255),
+    status ENUM('active','inactive') DEFAULT 'active'
 );
 CREATE TABLE contact (
     id INT AUTO_INCREMENT PRIMARY KEY,
